@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "networkcallpackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tparuna1/NetworkCallPackage",
+      "state" : {
+        "branch" : "main",
+        "revision" : "c111b8275a6544d57a2af933a3988987756cefa5"
+      }
+    }
+  ],
+  "version" : 2
+}
