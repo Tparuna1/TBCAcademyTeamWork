@@ -13,11 +13,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+
+        let tabBarController = UITabBarController()
+        let airQualityVC = AirQualityVC()
+        let weatherPageVC = WeatherPageVC()
+        let speciesPageVC = SpeciesPageVC()
+        let solarResourcesVC = SolarResourcesVC()
+        let populationPageVC = PopulationPageVC()
+
+        airQualityVC.tabBarItem = UITabBarItem(title: "Air Quality", image: UIImage(systemName: "air.purifier.fill"), tag: 0)
+        weatherPageVC.tabBarItem = UITabBarItem(title: "Weather", image: UIImage(systemName: "cloud.fill"), tag: 1)
+        speciesPageVC.tabBarItem = UITabBarItem(title: "Species", image: UIImage(systemName: "flame.fill"), tag: 2)
+        solarResourcesVC.tabBarItem = UITabBarItem(title: "Solar", image: UIImage(systemName: "sun.max.fill"), tag: 3)
+        populationPageVC.tabBarItem = UITabBarItem(title: "Population", image: UIImage(systemName: "person.2.fill"), tag: 4)
+
+        let airQualityNavController = UINavigationController(rootViewController: airQualityVC)
+        let weatherPageNavController = UINavigationController(rootViewController: weatherPageVC)
+        let speciesPageNavController = UINavigationController(rootViewController: speciesPageVC)
+        let solarResourcesNavController = UINavigationController(rootViewController: solarResourcesVC)
+        let populationPageNavController = UINavigationController(rootViewController: populationPageVC)
+
+
+        tabBarController.viewControllers = [airQualityNavController, weatherPageNavController, speciesPageNavController, solarResourcesNavController, populationPageNavController]
+
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
     }
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
