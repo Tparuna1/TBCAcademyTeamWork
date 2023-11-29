@@ -26,7 +26,7 @@ class PopulationPageVC: UIViewController {
         populationViewModel.viewDidLoad()
     }
     
-    func setupUI() {
+    private func setupUI() {
         setupPopulationTableView()
         setupNavigationBar()
     }
