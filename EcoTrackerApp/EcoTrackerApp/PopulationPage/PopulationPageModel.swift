@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+struct PopulationData: Decodable {
+    
+    let totalPopulation: [PopulationInfo]
+}
+
+struct PopulationInfo: Decodable {
+    let date: String
+    let population: Int
+}
