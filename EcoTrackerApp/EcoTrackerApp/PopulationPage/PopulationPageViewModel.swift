@@ -8,7 +8,7 @@
 import Foundation
 import NetworkService
 
-class PopulationPageViewModel {
+final class PopulationPageViewModel {
     var populationData: PopulationData?
     var onUpdate: (() -> Void)?
     
@@ -16,8 +16,9 @@ class PopulationPageViewModel {
         fetchPopulationData()
     }
     
+    //MARK: - Data Fetching
     private func fetchPopulationData() {
-        let urlString = "https://d6wn6bmjj722w.population.io:443/1.0/population/Georgia/today-and-tomorrow/"
+        let urlString = populationConstant.urlString
         
         NetworkService.fetchData(from: urlString) { [weak self] (result: Result<PopulationData, Error>) in
             switch result {
@@ -29,4 +30,8 @@ class PopulationPageViewModel {
             }
         }
     }
+}
+
+struct populationConstant {
+    static let urlString = "https://d6wn6bmjj722w.population.io:443/1.0/population/Georgia/today-and-tomorrow/"
 }
