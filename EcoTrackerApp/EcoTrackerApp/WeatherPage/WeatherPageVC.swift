@@ -7,9 +7,9 @@
 
 import UIKit
 
-final private class WeatherPageVC: UIViewController {
+final class WeatherPageVC: UIViewController {
     
-    var viewModel = WeatherPageViewModel()
+    private let viewModel = WeatherPageViewModel()
     
     private let latitudeTextField: UITextField = {
         let textField = UITextField()
