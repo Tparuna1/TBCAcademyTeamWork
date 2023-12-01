@@ -19,7 +19,7 @@ protocol WeatherPageViewModelDelegate: AnyObject{
     func didUpdateWeather(temp: Double)
 }
 
-class WeatherPageViewModel {
+final class WeatherPageViewModel {
     
     private var weatherInfo: WeatherPageModel?
     var weatherModel: WeatherPageModel?

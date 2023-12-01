@@ -14,12 +14,12 @@
 
 import Foundation
 
-// MARK: - Weather
+
 struct WeatherPageModel: Codable {
     let list: [List]
 }
 
-// MARK: - List
+
 struct List: Codable {
     let main: MainClass
     let weather: [Weather]
@@ -30,7 +30,7 @@ struct List: Codable {
     }
 }
 
-// MARK: - MainClass
+
 struct MainClass: Codable {
     let temp: Double
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherPageVC: UIViewController {
+final class WeatherPageVC: UIViewController {
     
     var viewModel = WeatherPageViewModel()
     
@@ -68,7 +68,7 @@ class WeatherPageVC: UIViewController {
         
     }
     
-    func setupLatitudeTextField() {
+    private func setupLatitudeTextField() {
         view.addSubview(latitudeTextField)
         
         NSLayoutConstraint.activate([
@@ -78,7 +78,7 @@ class WeatherPageVC: UIViewController {
         ])
     }
     
-    func setupLongitudeTextField() {
+    private func setupLongitudeTextField() {
         view.addSubview(longitudeTextField)
         
         NSLayoutConstraint.activate([
@@ -88,7 +88,7 @@ class WeatherPageVC: UIViewController {
         ])
     }
     
-    func setupShowWeatherButton() {
+    private func setupShowWeatherButton() {
         view.addSubview(showWeatherButton)
         
         
@@ -102,7 +102,7 @@ class WeatherPageVC: UIViewController {
         ])
     }
     
-    func setupWeatherLabel() {
+    private func setupWeatherLabel() {
         view.addSubview(weatherLabel)
         
         NSLayoutConstraint.activate([
@@ -112,7 +112,7 @@ class WeatherPageVC: UIViewController {
         ])
     }
     
-    func setupTemperatureTextField() {
+    private func setupTemperatureTextField() {
         view.addSubview(temperatureLabel)
         
         NSLayoutConstraint.activate([
@@ -141,7 +141,7 @@ class WeatherPageVC: UIViewController {
         viewModel.fetchWeatherInfo(latitude: latitudeText, longitude: longtitudeText)
     }
     
-    func setupTemperatureLabel() {
+    private func setupTemperatureLabel() {
         view.addSubview(temperatureLabel)
         
         NSLayoutConstraint.activate([
@@ -150,7 +150,7 @@ class WeatherPageVC: UIViewController {
             temperatureLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
-    func setupWeatherDescriptionLabel() {
+    private func setupWeatherDescriptionLabel() {
         view.addSubview(weatherDescriptionLabel)
         
         NSLayoutConstraint.activate([
@@ -160,7 +160,7 @@ class WeatherPageVC: UIViewController {
         ])
     }
 
-    func setupWeatherMainLabel() {
+    private func setupWeatherMainLabel() {
         view.addSubview(weatherMainLabel)
         
         NSLayoutConstraint.activate([
@@ -172,7 +172,7 @@ class WeatherPageVC: UIViewController {
 }
 
 extension WeatherPageVC: WeatherPageViewModelDelegate {
-    func didUpdateWeather(temp: Double) {
+func didUpdateWeather(temp: Double) {
         DispatchQueue.main.async {
             self.temperatureLabel.text = "Temperature: \(temp) °C"
         
