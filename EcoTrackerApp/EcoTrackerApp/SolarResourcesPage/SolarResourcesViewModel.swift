@@ -14,7 +14,7 @@ protocol SolarResourcesViewModelDelegate: AnyObject {
 
 
 // MARK: SolarResourcesViewModel
-class SolarResourcesViewModel {
+final class SolarResourcesViewModel {
     
     // MARK: Properties
     private var solarInfo: SolarResponse?
@@ -25,8 +25,8 @@ class SolarResourcesViewModel {
     
     // MARK: Fetching Solar Info
     func fetchSolarInfo(lat: String, lon: String) {
-        let api_key = SolarConstnats.API_KEY
-        let baseUrl = SolarConstnats.SolarBaseUrl
+        let api_key = SolarConstants.API_KEY
+        let baseUrl = SolarConstants.SolarBaseUrl
         let url = "\(baseUrl)api_key=\(api_key)&lat=\(lat)&lon=\(lon)"
         
         NetworkService.fetchData(from: url) { [weak self] (result: Result<SolarResponse, Error>) in
@@ -48,7 +48,7 @@ class SolarResourcesViewModel {
 
 
 // MARK: Constants
-struct SolarConstnats {
+struct SolarConstants {
     static let SolarBaseUrl = "https://developer.nrel.gov/api/solar/solar_resource/v1.json?"
     static let API_KEY = "nsNg96jLGXc5yMvqqzkN36ePDpu4mXKlVsdctZmQ"
 }
