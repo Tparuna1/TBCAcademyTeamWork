@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class WeatherPageVC: UIViewController {
+final private class WeatherPageVC: UIViewController {
     
     var viewModel = WeatherPageViewModel()
     
