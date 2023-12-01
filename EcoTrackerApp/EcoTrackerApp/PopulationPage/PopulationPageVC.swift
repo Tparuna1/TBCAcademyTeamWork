@@ -7,16 +7,17 @@
 
 import UIKit
 
-class PopulationPageVC: UIViewController {
-    let populationViewModel = PopulationPageViewModel()
-    let populationTableView = UITableView()
+final class PopulationPageVC: UIViewController {
+    private let populationViewModel = PopulationPageViewModel()
+    private let populationTableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupViewModel()
     }
-
+    
+    // MARK: - View Model Setup
     private func setupViewModel() {
         populationViewModel.onUpdate = { [weak self] in
             DispatchQueue.main.async {
@@ -26,6 +27,7 @@ class PopulationPageVC: UIViewController {
         populationViewModel.viewDidLoad()
     }
     
+    //MARK: - UI Setup
     private func setupUI() {
         setupPopulationTableView()
         setupNavigationBar()
@@ -57,6 +59,7 @@ class PopulationPageVC: UIViewController {
     }
 }
 
+// MARK: - Table View Data Source
 extension PopulationPageVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return populationViewModel.populationData?.totalPopulation.count ?? 0

@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+//MARK: - Models
 struct PopulationData: Decodable {
     
     let totalPopulation: [PopulationInfo]
