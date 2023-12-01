@@ -5,11 +5,16 @@
 //  Created by tornike <parunashvili on 29.11.23.
 //
 
+//  SpeciesPageVC.swift
+//  EcoTrackerApp
+//
+//  Created by tornike <parunashvili on 29.11.23.
+
 import UIKit
 
-final class SpeciesPageVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+final class SpeciesPageVC: UIViewController {
     
-    //MARK: -properties
+    //MARK: - Properties
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -25,7 +30,7 @@ final class SpeciesPageVC: UIViewController, UITableViewDataSource, UITableViewD
     
     private var viewModel: SpeciesPageViewModel!
     
-    //MARK: -lifecycle
+    //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,58 +43,6 @@ final class SpeciesPageVC: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.reloadData()
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfSpecies()
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SpeciesPageTableViewCell.reuseIdentifier, for: indexPath) as? SpeciesPageTableViewCell else {
-            fatalError("Unable to dequeue SpeciesPageTableViewCell")
-        }
-        
-        let species = viewModel.species(at: indexPath.row)
-        cell.configure(with: species)
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        200.0
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let species = viewModel.species(at: indexPath.row),
-              let wikipediaURLString = species.speciesWikipediaLink,
-              let wikipediaURL = URL(string: wikipediaURLString) else {
-            return
-        }
-        UIApplication.shared.open(wikipediaURL, options: [:], completionHandler: nil)
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let cityName = searchBar.text, !cityName.isEmpty else {
-            print("City name is empty")
-            viewModel.clearSpeciesData()
-            tableView.reloadData()
-            return
-        }
-        
-        print("Fetching data for city: \(cityName)")
-        
-        viewModel.fetchData(for: cityName) { [weak self] result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                    print("Reload Data Called")
-                }
-                
-            case .failure(let error):
-                print("Error fetching data: \(error.localizedDescription)")
-            }
-        }
     }
     
     // MARK: - Private Functions
@@ -128,8 +81,70 @@ final class SpeciesPageVC: UIViewController, UITableViewDataSource, UITableViewD
     }
 }
 
+// MARK: - UITableViewDataSource Extension
+extension SpeciesPageVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.numberOfSpecies()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SpeciesPageTableViewCell.reuseIdentifier, for: indexPath) as? SpeciesPageTableViewCell else {
+            fatalError("Unable to dequeue SpeciesPageTableViewCell")
+        }
+        
+        let species = viewModel.species(at: indexPath.row)
+        cell.configure(with: species)
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let species = viewModel.species(at: indexPath.row),
+              let wikipediaURLString = species.speciesWikipediaLink,
+              let wikipediaURL = URL(string: wikipediaURLString) else {
+            return
+        }
+        UIApplication.shared.open(wikipediaURL, options: [:], completionHandler: nil)
+    }
+}
+
+// MARK: - UITableViewDelegate Extension
+
+extension SpeciesPageVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            200.0
+        }
+}
+
+// MARK: - UISearchBarDelegate Extension
+extension SpeciesPageVC: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let cityName = searchBar.text, !cityName.isEmpty else {
+            print("City name is empty")
+            viewModel.clearSpeciesData()
+            tableView.reloadData()
+            return
+        }
+        
+        print("Fetching data for city: \(cityName)")
+        
+        viewModel.fetchData(for: cityName) { [weak self] result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                    print("Reload Data Called")
+                }
+                
+            case .failure(let error):
+                print("Error fetching data: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
 final class SpeciesPageTableViewCell: UITableViewCell {
-    //MARK: -properties
+    // MARK: - Properties
     static let reuseIdentifier = "SpeciesPageCell"
     
     private let speciesImageView: UIImageView = {
