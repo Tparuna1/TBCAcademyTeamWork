@@ -25,9 +25,9 @@ struct SpeciesTaxon: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case name = "name"
-        case defaultPhoto = "default_photo"
+        case defaultPhoto = "defaultPhoto"
         case attribution = "attribution"
-        case wikipediaURL = "wikipedia_url"
+        case wikipediaURL = "wikipediaUrl"
     }
 }
 
@@ -50,7 +50,7 @@ struct AutocompleteResponse: Decodable {
     let results: [AutocompleteResult]
 
     enum CodingKeys: String, CodingKey {
-        case totalResults = "total_results"
+        case totalResults = "totalResults"
         case results
     }
 }
@@ -78,7 +78,7 @@ struct SpeciesCountResponse: Decodable {
     let results: [SpeciesCountResult]
 
     enum CodingKeys: String, CodingKey {
-        case totalResults = "total_results"
+        case totalResults = "totalResults"
         case results
     }
 }
