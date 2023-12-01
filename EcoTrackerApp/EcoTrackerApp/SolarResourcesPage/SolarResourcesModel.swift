@@ -6,3 +6,18 @@
 //
 
 import Foundation
+
+// MARK: - SolarResponse
+struct SolarResponse: Decodable {
+    struct Output: Decodable {
+        struct Avg: Decodable {
+            let annual: Double
+        }
+        let avgDni: Avg
+        let avgGhi: Avg
+        let avgLatTilt: Avg
+    }
+    let outputs: Output
+}
+
+
