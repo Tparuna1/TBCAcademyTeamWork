@@ -6,92 +6,49 @@
 //
 
 import Foundation
-//import NetworkService
-
+import NetworkService
 
 protocol SolarResourcesViewModelDelegate: AnyObject {
     func didUpdateSolarInfo(avgDirectNormalIrradiance: Double, avgGlobalHorizontalIrradiance: Double, avgTiltAtLatitude: Double)
-    func didFailToUpdateSolarInfo(error: Error)
 }
 
+
+// MARK: SolarResourcesViewModel
 class SolarResourcesViewModel {
     
+    // MARK: Properties
     private var solarInfo: SolarResponse?
+    private var latitudeSuitable: Bool?
+    private var irradianceSuitable: Bool?
+    
     weak var delegate: SolarResourcesViewModelDelegate?
     
-    func viewDidLoad() {
-        fetchSolarInfo(lat: "39.282497", lon: "-111.793643")
-    }
-    
+    // MARK: Fetching Solar Info
     func fetchSolarInfo(lat: String, lon: String) {
-        let api_key = "nsNg96jLGXc5yMvqqzkN36ePDpu4mXKlVsdctZmQ"
-        let url =  "https://developer.nrel.gov/api/solar/solar_resource/v1.json?api_key=\(api_key)&lat=\(lat)&lon=\(lon)"
+        let api_key = SolarConstnats.API_KEY
+        let baseUrl = SolarConstnats.SolarBaseUrl
+        let url = "\(baseUrl)api_key=\(api_key)&lat=\(lat)&lon=\(lon)"
         
-        NetworkManager.fetchData(from: url, modelType: SolarResponse.self) { result in
+        NetworkService.fetchData(from: url) { [weak self] (result: Result<SolarResponse, Error>) in
             switch result {
             case .success(let solarResponse):
-                self.solarInfo = solarResponse
-                self.delegate?.didUpdateSolarInfo(
-                    avgDirectNormalIrradiance: self.solarInfo?.outputs.avg_dni.annual ?? 0,
-                    avgGlobalHorizontalIrradiance: self.solarInfo?.outputs.avg_ghi.annual ?? 0,
-                    avgTiltAtLatitude: self.solarInfo?.outputs.avg_ghi.annual ?? 0
+                self?.solarInfo = solarResponse
+                self?.delegate?.didUpdateSolarInfo(
+                    avgDirectNormalIrradiance: solarResponse.outputs.avgDni.annual,
+                    avgGlobalHorizontalIrradiance: solarResponse.outputs.avgGhi.annual,
+                    avgTiltAtLatitude: solarResponse.outputs.avgLatTilt.annual
                 )
-                print("success")
+                print("Success")
             case .failure(let error):
                 print("Error: \(error)")
-                self.delegate?.didFailToUpdateSolarInfo(error: error)
             }
         }
     }
 }
 
 
-
-/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- */
-
-
-public final class NetworkManager {
-    
-    public static func fetchData<T: Decodable>(from apiURL: String, modelType: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
-        guard let url = URL(string: apiURL) else {
-            completion(.failure(NetworkError.invalidURL))
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                completion(.failure(NetworkError.invalidResponse))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(T.self, from: data!)
-                completion(.success(result))
-            } catch {
-                if let decodingError = error as? DecodingError {
-                    print("Decoding Error: \(decodingError)")
-                }
-                completion(.failure(NetworkError.invalidData))
-            }
-        }.resume()
-    }
-    
+// MARK: Constants
+struct SolarConstnats {
+    static let SolarBaseUrl = "https://developer.nrel.gov/api/solar/solar_resource/v1.json?"
+    static let API_KEY = "nsNg96jLGXc5yMvqqzkN36ePDpu4mXKlVsdctZmQ"
 }
-
-
-public enum NetworkError: Error {
-    case invalidURL
-    case invalidResponse
-    case invalidData
-}
-
-
-
-
